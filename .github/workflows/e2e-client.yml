@@ -33,10 +33,16 @@ jobs:
   client-test:
     name: E2E (клиент)
     runs-on: ${{ matrix.os }}
+    # Зелёный прогон занимает ~30 минут; лимит защищает от зависшего клиента 1С.
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        oscript_version: ['stable']
+        # 2.1.0, а не stable: OneScript 2.2.0 (вышел 2026-09-05) изменил работу с процессами -
+        # ПотокВывода.Прочитать() отдаёт лишний перевод строки на каждый кусок (irac рвёт записи rac),
+        # а Процесс.Завершен ждёт закрытия пайпа, унаследованного клиентом 1С при --no-wait
+        # (джоб висит до таймаута). Вернуть stable после исправления в OneScript / 1commands.
+        oscript_version: ['2.1.0']
         v8_version: ['8.3.25.1445', '8.5.1.1302']
         os: ['windows-latest', 'ubuntu-22.04']
         locale: ['ru_RU']

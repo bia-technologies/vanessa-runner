@@ -111,7 +111,8 @@ jobs:
       - name: Установка OneScript
         uses: otymko/setup-onescript@v1.4
         with:
-          version: stable
+          # 2.1.0, а не stable - см. комментарий в e2e-client.yml (регрессии OneScript 2.2.0)
+          version: 2.1.0
 
       - name: Установка зависимостей
         run: |
